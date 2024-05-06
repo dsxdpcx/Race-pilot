@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ashuo.scms.mapper.CaipanMapper">
+
+    <resultMap id="caipanMap" type="com.ashuo.scms.entity.Caipan">
+        <id column="caipan_id" property="caipanId"/>
+        <result column="user_ids" property="userIds"/>
+        <result column="sign_time" property="signTime"/>
+        <result column="phone" property="phone"/>
+        <association property="user" javaType="com.ashuo.scms.entity.User">
+            <id column="user_id" property="userId"/>
+            <result column="user_no" property="userNo"/>
+            <result column="user_sex" property="userSex"/>
+            <result column="nickname" property="nickname"/>
+            <association property="team" javaType="com.ashuo.scms.entity.Team">
+                <result column="team_id" property="teamId"/>
+                <result column="team_name" property="teamName"/>
+            </association>
+        </association>
+        <association property="item" javaType="com.ashuo.scms.entity.Item">
+            <id column="item_id" property="itemId"/>
+            <result column="item_name" property="itemName"/>
+            <result column="item_sex" property="itemSex"/>
+            <result column="item_place" property="itemPlace"/>
+            <result column="item_unit" property="itemUnit"/>
+            <result column="start_time" property="startTime"/>
+            <result column="end_time" property="endTime"/>
+            <association property="season" javaType="com.ashuo.scms.entity.Season">
+                <id column="se_id" property="seasonId"/>
+                <result column="season_name" property="seasonName"/>
+                <result column="season_status" property="seasonStatus"/>
+            </association>
+            <association property="user" javaType="com.ashuo.scms.entity.User">
+                <id column="u_id" property="userId"/>
+                <result column="scorer" property="nickname"/>
+            </association>
+        </association>
+    </resultMap>
+
+
+<!--    <resultMap id="personScore" type="com.ashuo.scms.dto.CaipanScoreDto">-->
+<!--        <result column="team_name" property="teamName"/>-->
+<!--        <result column="user_no" property="userNo"/>-->
+<!--        <result column="nickname" property="nickname"/>-->
+<!--        <result column="user_sex" property="userSex"/>-->
+<!--        <result column="item_name" property="itemName"/>-->
+<!--        <result column="score" property="score"/>-->
+<!--    </resultMap>-->
+
+    <insert id="insertCaipan" parameterType="com.ashuo.scms.entity.Caipan"
+            useGeneratedKeys="true" keyColumn="caipan_id" keyProperty="caipanId">
+        INSERT INTO caipan(u_id, user_ids, i_id, sign_time,phone)
+        VALUES (#{user.userId}, #{userIds}, #{item.itemId},  #{signTime},#{phone}
+    </insert>
+    <update id="updateCaipan" parameterType="com.ashuo.scms.entity.Caipan">
+        UPDATE caipan
+        <set>
+            <if test="scoreStatus!=null and scoreStatus!=-1">score_status=#{scoreStatus},</if>
+            <if test="userIds!=null">user_ids=#{userIds},</if>
+        </set>
+        <where>
+            <if test="caipanId!=null and caipanId!=0">AND caipan_id=#{caipanId}</if>
+            <if test="user!=null and user.userId!=null and user.userId!=0">AND u_id=#{user.userId}</if>
+            <if test="item!=null and item.itemId!=null and item.itemId!=0">AND i_id=#{item.itemId}</if>
+        </where>
+    </update>
+    <delete id="deleteCaipan">
+        DELETE
+        FROM caipan
+        WHERE caipan_id = #{caipanId}
+    </delete>
+
+    <select id="queryCaipanByCaipanCondition" resultMap="caipanMap">
+        SELECT
+        a.caipan_id,
+        a.user_ids,
+        a.sign_time,
+        a.phone,
+        i.item_id,
+        i.u_id,
+        i.item_name,
+        i.item_sex,
+        i.item_place,
+        i.item_unit,
+        i.start_time,
+        i.end_time,
+        se.season_id,
+        se.season_name,
+        se.season_status,
+        u.user_id,
+        u.user_no,
+        u.nickname,
+        u.user_sex,
+        t.team_id,
+        t.team_name ,
+        u2.nickname AS scorer
+        FROM
+        `caipan` a INNER JOIN `user` u ON a.u_id = u.user_id
+        INNER JOIN `team` t ON t.team_id = u.t_id
+        INNER JOIN `item` i ON a.i_id = i.item_id
+        INNER JOIN `season` se ON i.se_id = se.season_id
+        INNER JOIN `user` u2 ON i.u_id = u2.user_id
+        <where>
+            <if test="caipan.caipanId!=null and caipan.caipanId!=0">AND a.caipan_id=#{caipan.caipanId}</if>
+            <if test="caipan.user!=null and caipan.user.userId!=null and caipan.user.userId!=0">AND
+                u.user_id=#{caipan.user.userId}
+            </if>
+            <if test="caipan.user!=null and caipan.user.nickname!=null">AND u.nickname LIKE
+                '%${caipan.user.nickname}%'
+            </if>
+            <if test="caipan.item!=null and caipan.item.itemId!=null and caipan.item.itemId!=0">AND
+                i.item_id=#{caipan.item.itemId}
+            </if>
+            <if test="caipan.item!=null and caipan.item.parentId!=null and caipan.item.parentId!=0">AND
+                i.parent_id=#{caipan.item.parentId}
+            </if>
+            <if test="caipan.item!=null and caipan.item.user!=null and caipan.item.user.userId!=null and caipan.item.user.userId!=0">
+                AND
+                i.u_id=#{caipan.item.user.userId}
+            </if>
+            <if test="caipan.item!=null and caipan.item.itemName!=null">AND i.item_name LIKE
+                '%${caipan.item.itemName}%'
+            </if>
+            <if test="caipan.item!=null and caipan.item.season!=null and caipan.item.season.seasonId!=null and caipan.item.season.seasonId!=0">
+                AND
+                se.season_id=#{caipan.item.season.seasonId}
+            </if>
+            <if test="caipan.scoreStatus!=null and caipan.scoreStatus!=-1">AND a.score_status=#{caipan.scoreStatus}
+            </if>
+            <if test="caipan.userIds!=null and caipan.userIds!=''">OR a.user_ids LIKE '%${caipan.userIds}%'</if>
+
+        </where>
+        ORDER BY
+        i.item_id
+        DESC
+    </select>
+
+
+
+
+
+</mapper>

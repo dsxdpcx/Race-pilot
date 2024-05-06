@@ -1,0 +1,3 @@
+[31m2024-04-26 01:01:42[0;39m [32m[http-nio-8088-exec-1][0;39m [34mINFO [0;39m [1;35mo.a.c.c.C.[Tomcat-1].[localhost].[/][0;39m [log,173]- Initializing Spring DispatcherServlet 'dispatcherServlet'
+[31m2024-04-26 01:01:42[0;39m [32m[http-nio-8088-exec-1][0;39m [34mINFO [0;39m [1;35mo.s.web.servlet.DispatcherServlet[0;39m [initServletBean,525]- Initializing Servlet 'dispatcherServlet'
+[31m2024-04-26 01:01:42[0;39m [32m[http-nio-8088-exec-1][0;39m [34mINFO [0;39m [1;35mo.s.web.servlet.DispatcherServlet[0;39m [initServletBean,547]- Completed initialization in 5 ms

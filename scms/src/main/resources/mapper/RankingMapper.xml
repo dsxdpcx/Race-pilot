@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ashuo.scms.mapper.RankingMapper">
+    <resultMap id="rankingMap" type="com.ashuo.scms.entity.Ranking">
+        <id column="ranking_id" property="rankingId"/>
+        <result column="rank" property="rank"/>
+        <result column="edit_time" property="editTime"/>
+        <association property="athlete" javaType="com.ashuo.scms.entity.Athlete">
+            <id column="athlete_id" property="athleteId"/>
+            <association property="item" javaType="com.ashuo.scms.entity.Item">
+                <id column="item_id" property="itemId"/>
+                <result column="item_name" property="itemName"/>
+                <result column="athlete_amount" property="athleteAmount"/>
+                <association property="season" javaType="com.ashuo.scms.entity.Season">
+                    <id column="se_id" property="seasonId"/>
+                    <result column="season_name" property="seasonName"/>
+                </association>
+            </association>
+            <association property="user" javaType="com.ashuo.scms.entity.User">
+                <id column="user_id" property="userId"/>
+                <result column="user_no" property="userNo"/>
+                <result column="nickname" property="nickname"/>
+                <result column="user_sex" property="userSex"/>
+                <association property="team" javaType="com.ashuo.scms.entity.Team">
+                    <id column="team_id" property="teamId"/>
+                    <result column="team_name" property="teamName"/>
+                </association>
+            </association>
+        </association>
+
+
+    </resultMap>
+    <insert id="insertRanking" parameterType="list"
+            useGeneratedKeys="true" keyColumn="ranking_id" keyProperty="rankingId">
+        INSERT INTO ranking ( a_id, `rank`, edit_time )
+        VALUES
+        <foreach collection="list" item="ranking" index="index" separator=",">
+            (
+            #{ranking.athlete.athleteId},#{ranking.rank},#{ranking.editTime}
+            )
+        </foreach>
+
+    </insert>
+
+    <delete id="deleteRankingByItemId" parameterType="integer">
+        DELETE r.*
+        FROM ranking r
+        INNER JOIN athlete a ON r.a_id = a.athlete_id
+        INNER JOIN item i ON a.i_id = i.item_id
+        WHERE i.item_id = #{itemId}
+    </delete>
+
+    <select id="queryTeamTotalRanking" resultMap="rankingMap">
+        SELECT
+        ANY_VALUE(r.ranking_id) AS ranking_id,
+        SUM(r.`rank`) AS `rank`,
+        ANY_VALUE(r.edit_time) AS edit_time,
+        ANY_VALUE(a.athlete_id) AS athlete_id,
+        ANY_VALUE(i.item_id) AS item_id,
+        ANY_VALUE(u.user_id) AS user_id,
+        ANY_VALUE(t.team_id) AS team_id,
+        ANY_VALUE(t.team_name) AS team_name,
+        ANY_VALUE(se.season_id) AS season_id,
+        ANY_VALUE(se.season_name) AS season_name
+        FROM
+        ranking r
+        INNER JOIN `athlete` a ON r.a_id = a.athlete_id
+        INNER JOIN `item` i ON a.i_id = i.item_id
+        INNER JOIN `user` u ON a.u_id = u.user_id
+        INNER JOIN `team` t ON u.t_id = t.team_id
+        INNER JOIN `season` se ON i.se_id = se.season_id
+        <where>
+            <if test="ranking.athlete!=null and ranking.athlete.user!=null  and ranking.athlete.user.team!=null and ranking.athlete.user.team.teamId!=null and ranking.athlete.user.team.teamId!=0">
+                AND t.team_id=#{ranking.athlete.user.team.teamId}
+            </if>
+            <if test="ranking.athlete!=null and ranking.athlete.user!=null  and ranking.athlete.user.team!=null and ranking.athlete.user.team.teamName!=null">
+                AND t.team_name LIKE
+                '%${ranking.athlete.user.team.teamName}%'
+            </if>
+            <if test="ranking.athlete!=null and ranking.athlete.item!=null and ranking.athlete.item.season!=null and ranking.athlete.item.season.seasonId!=null and ranking.athlete.item.season.seasonId!=0">
+                AND se.season_id=#{ranking.athlete.item.season.seasonId}
+            </if>
+        </where>
+        GROUP BY
+        u.t_id
+        ORDER BY
+        `rank` DESC
+    </select>
+
+    <select id="queryUserTotalRanking" resultMap="rankingMap">
+        SELECT
+        ANY_VALUE(r.ranking_id) AS ranking_id,
+        SUM(r.`rank`) AS `rank`,
+        ANY_VALUE(r.edit_time) AS edit_time,
+        ANY_VALUE(a.athlete_id) AS athlete_id,
+        ANY_VALUE(i.item_id) AS item_id,
+        ANY_VALUE(u.user_id) AS user_id,
+        ANY_VALUE(u.user_no) AS user_no,
+        ANY_VALUE(u.nickname) AS nickname,
+        ANY_VALUE(u.user_sex) AS user_sex,
+        ANY_VALUE(t.team_id) AS team_id,
+        ANY_VALUE(t.team_name) AS team_name,
+        ANY_VALUE(se.season_id) AS season_id,
+        ANY_VALUE(se.season_name) AS season_name
+        FROM
+        ranking r
+        INNER JOIN `athlete` a ON r.a_id = a.athlete_id
+        INNER JOIN `item` i ON a.i_id = i.item_id
+        INNER JOIN `user` u ON a.u_id = u.user_id
+        INNER JOIN `team` t ON u.t_id = t.team_id
+        INNER JOIN `season` se ON i.se_id = se.season_id
+        <where>
+            <if test="ranking.athlete!=null and ranking.athlete.user!=null and ranking.athlete.user.userId!=null and ranking.athlete.user.userId!=0">
+                AND u.user_id=#{ranking.athlete.user.userId}
+            </if>
+            <if test="ranking.athlete!=null and ranking.athlete.user!=null and ranking.athlete.user.nickname!=null">AND
+                u.nickname LIKE
+                '%${ranking.athlete.user.nickname}%'
+            </if>
+            <if test="ranking.athlete!=null and ranking.athlete.user!=null  and ranking.athlete.user.team!=null and ranking.athlete.user.team.teamId!=null and ranking.athlete.user.team.teamId!=0">
+                AND t.team_id=#{ranking.athlete.user.team.teamId}
+            </if>
+            <if test="ranking.athlete!=null and ranking.athlete.item!=null and ranking.athlete.item.season!=null and ranking.athlete.item.season.seasonId!=null and ranking.athlete.item.season.seasonId!=0">
+                AND se.season_id=#{ranking.athlete.item.season.seasonId}
+            </if>
+        </where>
+        GROUP BY
+        u.user_id
+        ORDER BY
+        `rank`
+        DESC
+    </select>
+
+</mapper>
