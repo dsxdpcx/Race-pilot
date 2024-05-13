@@ -53,24 +53,24 @@ public class Item implements Serializable {
     private Integer itemAmount;
 
     private Integer athleteAmount;
-    private Integer caipanAmount;
+
 
     private Integer groupAmount;
     private Integer track;
 
-    @JsonIgnore
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime startTime;
 
-    @JsonIgnore
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime endTime;
 
-    @JsonIgnore
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
 
-    @JsonIgnore
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime editTime;
 

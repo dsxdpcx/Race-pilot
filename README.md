@@ -1,4 +1,4 @@
-# SCMS
+# 赛事领航
 运动会综合管理系统
 
 技术栈：SpringBoot+Vue+Shiro+JWT+Swagger+Mybatis Plus+ExcelEasy

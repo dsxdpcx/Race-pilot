@@ -11,6 +11,8 @@
         i.item_sex,
         i.item_amount,
         i.athlete_amount,
+        i.group_amount,
+        i.track,
         i.start_time,
         i.edit_time,
         i.create_time,
@@ -35,6 +37,8 @@
         <result column="item_sex" property="itemSex"/>
         <result column="item_amount" property="itemAmount"/>
         <result column="athlete_amount" property="athleteAmount"/>
+        <result column="group_amount" property="groupAmount"/>
+        <result column="track" property="track"/>
         <result column="start_time" property="startTime"/>
         <result column="end_time" property="endTime"/>
         <result column="create_time" property="createTime"/>
@@ -159,8 +163,8 @@
         FROM
         item
         <where>
-<!--            <if test="item.itemName!=null">AND item_name LIKE '%${item.itemName}%'</if>-->
-<!--            <if test="item.itemId!=null and item.itemId!=0 ">AND item_id=#{item.itemId}</if>-->
+            <if test="item.itemName!=null">AND item_name LIKE '%${item.itemName}%'</if>
+            <if test="item.itemId!=null and item.itemId!=0 ">AND item_id=#{item.itemId}</if>
             <if test="item.parentId!=null and item.parentId!=0">AND item_id=#{item.parentId}</if>
             AND parent_id IS NULL
         </where>

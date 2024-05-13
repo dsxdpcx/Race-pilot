@@ -33,11 +33,10 @@ public class Season implements Serializable {
 
     private String seasonTopicDesc;
 
-    @JsonIgnore
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime seasonBeginTime;
 
-    @JsonIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime seasonEndTime;
 
@@ -46,8 +45,11 @@ public class Season implements Serializable {
     private Integer seasonAthleteAmount;
     private Integer seasonCaipanAmount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
 
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime editTime;
 
 

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -49,6 +50,7 @@ public class ItemController {
 
     @ApiOperation("添加项目")
     @PostMapping("/addItem")
+    @Transactional
 //    @RequiresRoles(value = {"1"})
     public ServerResponse addItem(@RequestBody Item item) {
 
@@ -66,6 +68,7 @@ public class ItemController {
         if (itemService.getOneItemByCondition(tempItem) != null) {
             return ServerResponse.createByErrorCodeMessage(400, "添加失败，改项目已存在");
         }
+        System.out.println(item.getItemName());
         Item itemTemplate = itemService.getItemTemplateDetail(item);
 
         //根据模板设置item名称等信息
@@ -149,6 +152,7 @@ public class ItemController {
         if (item.equals(itemService.getOneItemByCondition(tempItem))) {
             return ServerResponse.createByErrorCodeMessage(400, "修改失败，项目已存在");
         }
+        item.setUId(item.getUser().getUserId());
 
         item.setEditTime(LocalDateTime.now());
         int effNum = 0;
