@@ -28,6 +28,10 @@ public class shenheController {
     @PutMapping("/editAthlete1")
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse editAthlete1(@RequestBody Athlete athlete) {
+        if(athlete.getShenhe()!=2)
+        {
+            return ServerResponse.createByErrorCodeMessage(400, "审核失败，已审核");
+        }
         athlete.setShenheTime(LocalDateTime.now());
         athlete.setShenhe(1);
         int effNum = 0;
@@ -45,6 +49,10 @@ public class shenheController {
     @PutMapping("/editAthlete2")
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse editAthlete2(@RequestBody Athlete athlete) {
+        if(athlete.getShenhe()!=2)
+        {
+            return ServerResponse.createByErrorCodeMessage(400, "审核失败，已审核");
+        }
         athlete.setShenheTime(LocalDateTime.now());
         athlete.setShenhe(0);
         int effNum = 0;

@@ -4,7 +4,7 @@
     <el-header>
       <div class="div">
         <img alt class="img" src="../assets/hzu_logo.jpg"/>
-        <span class="span">运动会综合管理系统</span>
+        <span class="span">赛事领航</span>
       </div>
       <div>
         <span style="font-size:16px; margin-right:30px; font-weight:700">{{currentUser.nickname}}</span>

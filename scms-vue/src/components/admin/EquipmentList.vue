@@ -258,8 +258,8 @@ export default {
       _this.$refs.addFormRef.validate(async (valid) => {
         if (!valid) return;
         axios.post("/equipment/addequipment", _this.addForm).then((res) => {
-          if (res.status != 200) {
-            return _this.$message.error(res.msg);
+          if (res.data.status != 200) {
+            return _this.$message.error(res.data.msg);
           }
           _this.$message.success("操作成功");
           _this.addDialogVisible = false;
@@ -280,7 +280,7 @@ export default {
         return _this.$message.info("已取消删除");
       }
       axios.delete("/equipment/removeequipment?eqId=" + id).then((res) => {
-        if (res.status == 200) {
+        if (res.data.status == 200) {
           _this.$message.success("删除成功");
           _this.addDialogVisible = false;
           _this.page();

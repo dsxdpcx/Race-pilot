@@ -78,6 +78,15 @@ public class BorrowController {
 //    @RequiresAuthentication
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse insert(@RequestBody Borrow borrow) {
+        int equipmentId = borrow.getEqId();
+        int bosum=borrow.getBoNum();
+        Equipment equipment = equipmentService.getById(equipmentId);
+        int num = equipment.getEqSum();
+        if (num <= 0) {
+            return ServerResponse.createByErrorCodeMessage(400, "器材数量不足");
+        }
+        equipment.setEqSum(num - bosum);
+        equipmentService.updateById(equipment);
         borrow.setBoStarttime(LocalDateTime.now());
         borrow.setBoState(0);
         try {

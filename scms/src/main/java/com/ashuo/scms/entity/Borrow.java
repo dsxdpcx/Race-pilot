@@ -1,6 +1,7 @@
 package com.ashuo.scms.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +21,7 @@ public class Borrow implements Serializable {
     private Integer boId;
     private Integer userId;
     private Integer eqId;
+    @TableField(exist = false)
     private Equipment equipment;
     private Integer boNum;
     @JsonIgnore

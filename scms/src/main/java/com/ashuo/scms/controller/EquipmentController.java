@@ -43,13 +43,13 @@ public class EquipmentController {
             return ServerResponse.createByErrorCodeMessage(400, "添加失败，项目信息为空");
         }
         //通过seasonId、parentId和性别判断是否已存在相同Item
-        Equipment tempEquipment = new Equipment();
-        tempEquipment.setEqId(equipment.getEqId());
-        tempEquipment.setEqName(equipment.getEqName());
-        tempEquipment.setEqModel(equipment.getEqModel());
-        tempEquipment.setEqPlace(equipment.getEqPlace());
-        tempEquipment.setEqSum(equipment.getEqSum());
-        tempEquipment.setEqBuytime(LocalDateTime.now());
+//        Equipment tempEquipment = new Equipment();
+//        tempEquipment.setEqId(equipment.getEqId());
+//        tempEquipment.setEqName(equipment.getEqName());
+//        tempEquipment.setEqModel(equipment.getEqModel());
+//        tempEquipment.setEqPlace(equipment.getEqPlace());
+//        tempEquipment.setEqSum(equipment.getEqSum());
+//        tempEquipment.setEqBuytime(LocalDateTime.now());
 
         boolean effNum = false;
         try {
