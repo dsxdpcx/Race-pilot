@@ -116,7 +116,7 @@ public class ScoreController {
 
     @ApiOperation("修改分数")
     @PutMapping("/editScore")
-    @RequiresRoles(value = {"2"})
+    @RequiresRoles(value = {"1"})
     @Transactional
     public ServerResponse editScore(@RequestBody Score score) {
         if (score == null || score.getScore() == null || score.getScore().compareTo(BigDecimal.ZERO) == 0 || score.getAthlete() == null) {
