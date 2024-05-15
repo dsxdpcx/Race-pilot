@@ -26,14 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author AShuo
- * @since 2021-04-05
- */
 
 @Api(tags = "项目报名接口")
 @RestController
@@ -205,7 +197,7 @@ public class AthleteController {
 
     @ApiOperation("取消报名")
     @DeleteMapping("/deleteAthlete")
-    @RequiresAuthentication
+//    @RequiresAuthentication
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse deleteAthlete(Integer athleteId) {
         Page<Athlete> page = new Page(1, 1);
@@ -249,6 +241,17 @@ public class AthleteController {
 //        }
 //        return ServerResponse.createBySuccessMessage("取消报名成功");
 //    }
+
+
+    @ApiOperation("查询裁判")
+    @GetMapping("/queryCaipan")
+//    @RequiresAuthentication
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse queryCaipan() {
+
+        List<Caipan> caipanList = caipanService.list();
+        return ServerResponse.createBySuccess(caipanList);
+    }
 
 
 }

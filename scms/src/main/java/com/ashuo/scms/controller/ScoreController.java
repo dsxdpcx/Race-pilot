@@ -24,14 +24,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author AShuo
- * @since 2021-04-05
- */
 @Api(tags = "项目分数接口")
 @RestController
 @Slf4j
@@ -242,6 +234,9 @@ public class ScoreController {
         }
         rankingService.addRanking(rankingList);
     }
+
+
+
 }
 
 

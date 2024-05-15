@@ -3,14 +3,33 @@
     <!--导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>我的参赛项目</el-breadcrumb-item>
-      <el-breadcrumb-item>我的参赛项目</el-breadcrumb-item>
+      <el-breadcrumb-item>器材管理</el-breadcrumb-item>
+      <el-breadcrumb-item>借用信息</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!--项目列表主体-->
     <el-card>
+      <!--搜索区域-->
+      <el-row :gutter="25">
+        <el-col :span="5">
+          <!--搜索添加-->
+          <el-input
+              v-model="queryInfo.query"
+              clearable
+              placeholder="请输入器材名称"
+              @clear="page"
+              @keyup.enter.native="page"
+          >
+            <!--搜索按钮-->
+            <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="page"
+            ></el-button>
+          </el-input>
+        </el-col>
+      </el-row>
       <!--项目列表 stripe隔行变色-->
-      <!--参数运动员列表 stripe隔行变色-->
       <el-table :data="borrowlist" border stripe>
         <!--索引列-->
 
@@ -60,18 +79,36 @@
 import axios from "axios";
 
 export default {
-  name: "MyBorrow",
+  name: "Borrow",
   data() {
     return {
       borrowlist: [],
-
-      userId: JSON.parse(localStorage.getItem("user")).userId,
-
       queryInfo: {
         currentPage: 1,
         pageSize: 10,
         query: "",
       },
+      //select远程搜索加载中
+      loading: false,
+      addForm: {
+        userId: "",
+        eqId: "",
+        boNum: "",
+        boStarttime: "",
+        boState: "0",
+        boDescription: "",
+      },
+      editForm: {
+        boId: "",
+        userId: "",
+        eqId: "",
+        boNum: "",
+        boStarttime: "",
+        boState: "0",
+        boDescription: "",
+      },
+      addDialogVisible: false,
+      editDialogVisible: false,
       total: 0,
       // 对话框状态
       dialogTableVisible: false,
@@ -86,7 +123,7 @@ export default {
       const _this = this;
       axios
           .get(
-              "/borrow/queryborrow?userId=" +this.userId
+              "/borrow/queryall"
           )
           .then((res) => {
             let data = res.data.data;
@@ -106,35 +143,15 @@ export default {
     },
 
 
-    async editBorrow(row) {
+
+
+    async getItemDetail(id) {
       const _this = this;
-      const confirmResult = await _this
-          .$confirm("是否确定归还？", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-          })
-          .catch((err) => err);
-      if (confirmResult !== "confirm") {
-        return _this.$message.info("已取消操作");
-      }
-      row.userId=_this.userId;
-      if (row.boState == "未归还") {
-        row.boState = 0;
-      } else {
-        row.boState = 1;
-      }
-      axios
-          .put("/borrow/returnequipment",row)
-          .then((res) => {
-            if (res.data.status == 200) {
-              _this.$message.success("已归还");
-              _this.addDialogVisible = false;
-              _this.page();
-            } else {
-              _this.$message.error(res.data.msg);
-            }
-          });
+      axios.get("/item/getItem?itemId=" + id).then((res) => {
+        let data = res.data.data;
+        _this.itemDetail = [];
+        _this.itemDetail.push(data);
+      });
     },
 
     handleSizeChange(newSize) {
@@ -147,6 +164,40 @@ export default {
       _this.queryInfo.currentPage = newPage;
       _this.page();
     },
+
+
+
+    async showEditDialog(id) {
+      const _this = this;
+      axios.get("/e/getSeason?seasonId=" + id).then((res) => {
+        let data = res.data.data;
+        _this.editForm = data;
+
+
+        _this.editDialogVisible = true;
+      });
+    },
+    addDialogClosed() {
+      const _this = this;
+      _this.$refs.addFormRef.resetFields();
+    },
+
+    async searchUser(queryName) {
+      const _this = this;
+      _this.loading = true;
+      axios
+          .get("/user/queryUser?currentPage=1&pageSize=999999999&query=" + queryName)
+          .then((res) => {
+            let data = res.data.data.records;
+            data.forEach((item, index) => {
+              item.nickname = item.nickname + "      " + item.team.teamName;
+            });
+            _this.userList = data;
+            this.loading = false;
+          });
+    },
+
+
   },
 };
 </script>
@@ -169,5 +220,4 @@ export default {
   color: #666;
   height: 40px;
 }
-
 </style>

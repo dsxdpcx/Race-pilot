@@ -17,14 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-/**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author AShuo
- * @since 2021-04-05
- */
 @Api(tags = "运动会接口")
 @RestController
 @Slf4j

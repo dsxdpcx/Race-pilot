@@ -25,14 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
-/**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author AShuo
- * @since 2021-04-05
- */
+
 
 @Api(tags = "用户接口")
 @RestController

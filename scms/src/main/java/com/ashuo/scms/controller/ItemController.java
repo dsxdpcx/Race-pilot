@@ -83,13 +83,13 @@ public class ItemController {
         //设置创建时间
         item.setCreateTime(LocalDateTime.now());
         item.setEditTime(LocalDateTime.now());
-        boolean effNum = false;
+        int effNum = 0;
         try {
-            effNum = itemService.save(item);
+            effNum = itemService.addItem(item);
         } catch (Exception e) {
             return ServerResponse.createByErrorCodeMessage(400, "添加失败");
         }
-        if (effNum == false) {
+        if (effNum == 0) {
             return ServerResponse.createByErrorCodeMessage(400, "添加失败");
         }
         return ServerResponse.createBySuccessMessage("添加成功");

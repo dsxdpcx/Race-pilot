@@ -21,8 +21,9 @@ import MyItem from "../components/athlete/MyItem";
 import AthleteScoreList from "../components/admin/AthleteScoreList";
 import EquipmentList from "@/components/admin/EquipmentList";
 import ShenheList from "@/components/admin/ShenheList";
-import BorrowList from "@/components/admin/BorrowList";
-import MyBorrow from "@/components/admin/MyBorrow";
+import BorrowList from "@/components/admin/Borrow";
+import MyBorrow from "@/components/fuzeren/MyBorrow";
+import Borrow from "@/components/fuzeren/BorrowList";
 
 Vue.use(VueRouter);
 
@@ -77,6 +78,10 @@ const routes = [{
             {
                 path: "/equipment/borrowlist",
                 component: BorrowList
+            },
+            {
+                path: "/equipment/borrow",
+                component: Borrow
             },
             {
                 path: "/equipment/myborrow",

@@ -72,6 +72,14 @@ public class BorrowController {
         return ServerResponse.createBySuccess(borrowList);
     }
 
+    @ApiOperation("查看所有借用记录")
+    @GetMapping("/queryall")
+//    @RequiresAuthentication
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse queryAll() {
+        List<Borrow> borrowList = borrowService.list();
+        return ServerResponse.createBySuccess(borrowList);
+    }
 
     @ApiOperation("借出器材")
     @PostMapping("/borrow")

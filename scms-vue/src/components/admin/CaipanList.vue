@@ -3,8 +3,8 @@
     <!--导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>参数裁判员管理</el-breadcrumb-item>
-      <el-breadcrumb-item>参数裁判员信息</el-breadcrumb-item>
+      <el-breadcrumb-item>报名管理</el-breadcrumb-item>
+      <el-breadcrumb-item>裁判员信息</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!--参数运动员列表主体-->
@@ -68,7 +68,7 @@
         </div>
         <el-col :span="4">
           <el-button type="primary" @click="exportExcel()"
-          >导出运动员列表
+          >导出裁判员列表
           </el-button
           >
         </el-col>
@@ -92,21 +92,14 @@
         <!--索引列-->
 
         <el-table-column type="index"></el-table-column>
-        <el-table-column label="学号" prop="user.userNo"></el-table-column>
+        <el-table-column label="编号" prop="caipanId"></el-table-column>
         <el-table-column
-            label="参数运动员"
-            prop="user.nickname"
+            label="姓名"
+            prop="name"
         ></el-table-column>
         <el-table-column label="性别" prop="user.userSex"></el-table-column>
-
-        <el-table-column
-            label="参赛项目"
-            prop="item.itemName"
-        ></el-table-column>
-        <el-table-column label="地点" prop="item.itemPlace"></el-table-column>
-
         <el-table-column label="报名时间" prop="signTime"></el-table-column>
-
+        <el-table-column label="联系电话" prop="phone"></el-table-column>
         <el-table-column label="操作" prop="state">
           <template slot-scope="scope">
             <!--删除-->
@@ -196,11 +189,11 @@ export default {
       const _this = this;
       axios
           .get(
-              "/athlete/queryCaipan?item.season.seasonId=" + _this.selectSeasonId + "&item.parentId=" + _this.selectItemId + "&queryInfo=", {params: _this.queryInfo}
+              "/athlete/queryCaipan"
           )
           .then((res) => {
             let data = res.data.data;
-            _this.caipanList = data.records;
+            _this.caipanList = data;
             _this.queryInfo.currentPage = data.current;
             _this.total = data.total;
             _this.queryInfo.pageSize = data.size;

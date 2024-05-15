@@ -3,7 +3,7 @@
     <!--导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>参赛运动员管理</el-breadcrumb-item>
+      <el-breadcrumb-item>报名管理</el-breadcrumb-item>
       <el-breadcrumb-item>参赛运动员信息</el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -111,6 +111,8 @@
             prop="item.itemName"
         ></el-table-column>
         <el-table-column label="地点" prop="item.itemPlace"></el-table-column>
+        <el-table-column label="分组" prop="groupId"></el-table-column>
+        <el-table-column label="道次" prop="track"></el-table-column>
 
         <el-table-column label="报名时间" prop="signTime"></el-table-column>
 
@@ -118,6 +120,7 @@
           <template slot-scope="scope">
             <!--删除-->
             <el-button
+                :disabled="scope.row.userIds!=null"
                 icon="el-icon-delete"
                 size="mini"
                 type="danger"
@@ -347,7 +350,7 @@ export default {
         return _this.$message.info("已取消操作");
       }
       axios
-          .delete("/athlete/deleteCaipan?caipanId=" + athleteId)
+          .delete("/athlete/deleteAthlete?athleteId=" + athleteId)
           .then((res) => {
             if (res.data.status == 200) {
 
